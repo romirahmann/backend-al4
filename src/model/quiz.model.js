@@ -9,7 +9,6 @@ const getAllQuestion = async () =>
       "q.id_area",
       "ar.nama_area",
       "an.answer_id",
-      "an.question_id",
       "an.status"
     )
     .from("questions as q")
@@ -34,7 +33,7 @@ const getAllByAreaId = async (areaID) =>
 
 const addNewQuestion = async (data) => await project("questions").insert(data);
 const updateQuestion = async (id, data) =>
-  await project("questions").where("question_id", id).insert(data);
+  await project("questions").where("question_id", id).update(data);
 
 // ANSWER
 const getAnswerByQuestionId = async (id) =>
