@@ -74,9 +74,11 @@ const updateQuestion = async (id, data) =>
 // ANSWER
 const getAnswerByQuestionId = async (id) =>
   await project.select("*").from("answer").where("question_id", id);
+const getAnswerById = async (id) =>
+  await project("answer").where("answer_id", id);
 const addAnswer = async (data) => await project("answer").insert(data);
 const updateAnswer = async (id, data) =>
-  await project("answer").where("answer_id", id).insert(data);
+  await project("answer").where("answer_id", id).update(data);
 
 // RESULT
 
@@ -89,4 +91,5 @@ module.exports = {
   updateAnswer,
   getAnswerByQuestionId,
   getQuestionById,
+  getAnswerById,
 };

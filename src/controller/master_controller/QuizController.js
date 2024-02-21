@@ -58,6 +58,15 @@ const getAnswerByQuestion = async (req, res) => {
     return api.error(res, "Internal Server Error");
   }
 };
+const getAnswerById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    let data = await model.getAnswerById(id);
+    return api.ok(res, data);
+  } catch {
+    return api.error(res, "Internal Server Error");
+  }
+};
 const addAnswer = async (req, res) => {
   const newAnswer = req.body;
   try {
@@ -87,4 +96,5 @@ module.exports = {
   getAnswerByQuestion,
   addAnswer,
   getQuestionById,
+  getAnswerById,
 };
