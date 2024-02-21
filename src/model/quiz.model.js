@@ -8,14 +8,48 @@ const getAllQuestion = async () =>
       "q.question_text",
       "q.id_area",
       "q.is_deleted",
+      "ar.nama_area"
+    )
+    .from("questions as q")
+    .join("area as ar", "ar.id_area", "q.id_area")
+    .where("q.is_deleted", 0);
+
+const getQuestionById = async (id) => {
+  const question = await project
+    .select(
+      "q.question_id",
+      "q.question_text",
+      "q.id_area",
+      "q.is_deleted",
       "ar.nama_area",
       "an.answer_id",
+      "an.answer_text",
       "an.status"
     )
     .from("questions as q")
     .join("area as ar", "ar.id_area", "q.id_area")
     .leftJoin("answer as an", "an.question_id", "q.question_id")
-    .where("q.is_deleted", 0);
+    .where("q.question_id", id)
+    .andWhere("q.is_deleted", 0);
+
+  // Mengelompokkan jawaban ke dalam objek pertanyaan
+  const questionWithAnswer = question.reduce((acc, curr) => {
+    if (!acc) {
+      acc = {
+        ...curr,
+        answer: [],
+      };
+    }
+    acc.answer.push({
+      answer_id: curr.answer_id,
+      answer_text: curr.answer_text,
+      status: curr.status,
+    });
+    return acc;
+  }, null);
+
+  return questionWithAnswer;
+};
 
 const getAllByAreaId = async (areaID) =>
   await project
@@ -54,4 +88,5 @@ module.exports = {
   addAnswer,
   updateAnswer,
   getAnswerByQuestionId,
+  getQuestionById,
 };

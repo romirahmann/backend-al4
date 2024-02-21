@@ -19,6 +19,15 @@ const getAllQuestionByAreaID = async (req, res) => {
     return api.error(res, "Internal Server Error");
   }
 };
+const getQuestionById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    let data = await model.getQuestionById(id);
+    return api.ok(res, data);
+  } catch {
+    return api.error(res, "Internal Server Error");
+  }
+};
 const addQuestion = async (req, res) => {
   const newQuestion = req.body;
   try {
@@ -77,4 +86,5 @@ module.exports = {
   updateAnswer,
   getAnswerByQuestion,
   addAnswer,
+  getQuestionById,
 };

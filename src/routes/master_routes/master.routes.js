@@ -158,6 +158,7 @@ router.get("/total-price/:areaId", OutputController.getTotalPrice);
 // QUESTIONS
 router.get("/questions", QuizController.getAllQuestions);
 router.get("/question/:areaID", QuizController.getAllQuestionByAreaID);
+router.get("/detail-question/:id", QuizController.getQuestionById);
 router.post("/question", QuizController.addQuestion);
 router.put("/question/:questionID", QuizController.updateQuestion);
 // ANSWER
