@@ -158,11 +158,13 @@ router.get("/total-price/:areaId", OutputController.getTotalPrice);
 // QUESTIONS
 router.get("/questions", QuizController.getAllQuestions);
 router.get("/question/:areaID", QuizController.getAllQuestionByAreaID);
+router.get("/detail-question/:id", QuizController.getQuestionById);
 router.post("/question", QuizController.addQuestion);
 router.put("/question/:questionID", QuizController.updateQuestion);
 // ANSWER
 router.get("/answer/:questionID", QuizController.getAnswerByQuestion);
+router.get("/edit-answer/:id", QuizController.getAnswerById);
 router.post("/answer", QuizController.addAnswer);
-router.post("/answer/:answerID", QuizController.updateAnswer);
+router.put("/answer/:answerID", QuizController.updateAnswer);
 
 module.exports = router;
