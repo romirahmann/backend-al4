@@ -51,8 +51,8 @@ const getQuestionById = async (id) => {
   return questionWithAnswer;
 };
 
-const getAllByAreaId = async (areaID) =>
-  await project
+const getAllByAreaId = async (areaID) => {
+  const questions = await project
     .select(
       "q.question_id",
       "q.question_text",
@@ -60,16 +60,51 @@ const getAllByAreaId = async (areaID) =>
       "q.is_deleted",
       "ar.nama_area",
       "an.answer_id",
+      "an.answer_text",
       "an.status"
     )
     .from("questions as q")
     .join("area as ar", "ar.id_area", "q.id_area")
     .leftJoin("answer as an", "an.question_id", "q.question_id")
-    .where("q.id_area", areaID);
+    .where("q.id_area", areaID) // Memfilter pertanyaan berdasarkan area ID
+    .andWhere("q.is_deleted", 0);
+
+  // Mengelompokkan pertanyaan-pertanyaan berdasarkan ID
+  const groupedQuestions = questions.reduce((acc, question) => {
+    if (!acc[question.question_id]) {
+      acc[question.question_id] = {
+        question_id: question.question_id,
+        question_text: question.question_text,
+        id_area: question.id_area,
+        is_deleted: question.is_deleted,
+        nama_area: question.nama_area,
+        answers: [],
+      };
+    }
+    if (question.answer_id) {
+      // Jika jawaban ada (non-null), tambahkan ke pertanyaan yang sesuai
+      acc[question.question_id].answers.push({
+        answer_id: question.answer_id,
+        answer_text: question.answer_text,
+        status: question.status,
+      });
+    }
+    return acc;
+  }, {});
+
+  // Ubah objek yang dikelompokkan menjadi array
+  const questionsWithAnswers = Object.values(groupedQuestions);
+
+  return {
+    questionsWithAnswers,
+  };
+};
 
 const addNewQuestion = async (data) => await project("questions").insert(data);
 const updateQuestion = async (id, data) =>
   await project("questions").where("question_id", id).update(data);
+
+const addScore = async (data) => await project("score").insert(data);
 
 // ANSWER
 const getAnswerByQuestionId = async (id) =>
@@ -92,4 +127,5 @@ module.exports = {
   getAnswerByQuestionId,
   getQuestionById,
   getAnswerById,
+  addScore,
 };

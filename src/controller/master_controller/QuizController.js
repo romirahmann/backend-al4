@@ -29,9 +29,19 @@ const getQuestionById = async (req, res) => {
   }
 };
 const addQuestion = async (req, res) => {
-  const newQuestion = req.body;
+  const newData = req.body;
+  const newQuestion = {
+    question_text: newData.question_text,
+    id_area: newData.id_area,
+  };
   try {
-    let data = await model.addNewQuestion(newQuestion);
+    let question = await model.addNewQuestion(newQuestion);
+    const dataScore = {
+      question_id: question[0],
+      score: newData.score,
+    };
+    let score = await model.addScore(dataScore);
+    let data = [question, score];
     return api.ok(res, data);
   } catch {
     return api.error(res, "Internal Server Error");
