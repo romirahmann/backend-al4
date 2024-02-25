@@ -61,11 +61,13 @@ const getAllByAreaId = async (areaID) => {
       "ar.nama_area",
       "an.answer_id",
       "an.answer_text",
-      "an.status"
+      "an.status",
+      "s.score"
     )
     .from("questions as q")
     .join("area as ar", "ar.id_area", "q.id_area")
     .leftJoin("answer as an", "an.question_id", "q.question_id")
+    .leftJoin("score as s", "s.question_id", "q.question_id")
     .where("q.id_area", areaID) // Memfilter pertanyaan berdasarkan area ID
     .andWhere("q.is_deleted", 0);
 
@@ -78,6 +80,7 @@ const getAllByAreaId = async (areaID) => {
         id_area: question.id_area,
         is_deleted: question.is_deleted,
         nama_area: question.nama_area,
+        score: question.score,
         answers: [],
       };
     }
@@ -116,6 +119,9 @@ const updateAnswer = async (id, data) =>
   await project("answer").where("answer_id", id).update(data);
 
 // RESULT
+const totalResultByUserID = async (id) =>
+  await project("result").sum("score as totalScore").where("id_user", id);
+const addResult = async (data) => await project("result").insert(data);
 
 module.exports = {
   getAllQuestion,
@@ -128,4 +134,6 @@ module.exports = {
   getQuestionById,
   getAnswerById,
   addScore,
+  addResult,
+  totalResultByUserID,
 };

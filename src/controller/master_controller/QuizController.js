@@ -97,6 +97,27 @@ const updateAnswer = async (req, res) => {
   }
 };
 
+// RESULT
+const addResultByUserID = async (req, res) => {
+  const newResult = req.body;
+  try {
+    let data = await model.addResult(newResult);
+    return api.ok(res, data);
+  } catch {
+    return api.error(res, "Internal Server Error");
+  }
+};
+
+const getTotalScoreByUserID = async (req, res) => {
+  const { id } = req.params;
+  try {
+    let data = await model.totalResultByUserID(id);
+    return api.ok(res, data);
+  } catch {
+    return api.error(res, "Internal Server Error");
+  }
+};
+
 module.exports = {
   getAllQuestions,
   getAllQuestionByAreaID,
@@ -107,4 +128,6 @@ module.exports = {
   addAnswer,
   getQuestionById,
   getAnswerById,
+  addResultByUserID,
+  getTotalScoreByUserID,
 };
