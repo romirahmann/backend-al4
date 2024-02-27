@@ -122,7 +122,34 @@ const updateAnswer = async (id, data) =>
 const totalResultByUserID = async (id) =>
   await project("result").sum("score as totalScore").where("id_user", id);
 const addResult = async (data) => await project("result").insert(data);
+const getResultByAreaId = async (areaID) => {
+  const results = await project
+    .select("r.id_user", "r.score", "u.nama_user") // Mengambil data id_user, score, dan nama_user
+    .from("result as r")
+    .leftJoin("user as u", "r.id_user", "u.id_user") // Melakukan LEFT JOIN antara tabel result dan user
+    .where("r.id_area", areaID);
 
+  // Menghitung total skor dari setiap id_user
+  const totalScores = results.reduce((acc, curr) => {
+    if (!acc[curr.id_user]) {
+      acc[curr.id_user] = {
+        nama_user: curr.nama_user, // Menyimpan nama_user
+        total_score: 0,
+      };
+    }
+    acc[curr.id_user].total_score += curr.score;
+    return acc;
+  }, {});
+
+  // Mengonversi objek totalScores menjadi array dengan format yang diinginkan
+  const formattedResults = Object.keys(totalScores).map((id_user) => ({
+    id_user: parseInt(id_user), // Mengonversi id_user ke tipe integer jika diperlukan
+    nama_user: totalScores[id_user].nama_user,
+    total_score: totalScores[id_user].total_score,
+  }));
+
+  return formattedResults;
+};
 module.exports = {
   getAllQuestion,
   getAllByAreaId,
@@ -136,4 +163,5 @@ module.exports = {
   addScore,
   addResult,
   totalResultByUserID,
+  getResultByAreaId,
 };

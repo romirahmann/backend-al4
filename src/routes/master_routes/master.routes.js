@@ -170,5 +170,6 @@ router.put("/answer/:answerID", QuizController.updateAnswer);
 // Result
 router.get("/total-score/:id", QuizController.getTotalScoreByUserID);
 router.post("/add-result", QuizController.addResultByUserID);
+router.get("/get-result/:id", QuizController.getResultByAreaId);
 
 module.exports = router;

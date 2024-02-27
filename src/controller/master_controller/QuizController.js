@@ -118,6 +118,16 @@ const getTotalScoreByUserID = async (req, res) => {
   }
 };
 
+const getResultByAreaId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    let data = await model.getResultByAreaId(id);
+    return api.ok(res, data);
+  } catch {
+    return api.error(res, "Internal Server Error");
+  }
+};
+
 module.exports = {
   getAllQuestions,
   getAllQuestionByAreaID,
@@ -130,4 +140,5 @@ module.exports = {
   getAnswerById,
   addResultByUserID,
   getTotalScoreByUserID,
+  getResultByAreaId,
 };
