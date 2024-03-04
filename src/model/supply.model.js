@@ -23,6 +23,7 @@ const getSupplyWithArea = async () => {
   supply.eom,
   supply.minimal_stok,
   supply.max_stok,
+  supply.resv_date,
   supply.is_deleted
   FROM 
   supply
@@ -43,7 +44,8 @@ const getSupplyByArea = async (area) => {
       'supply.no_material',
       'supply.eom',
       'supply.minimal_stok',
-      'supply.max_stok'
+      'supply.max_stok',
+      'supply.resv_date'
     )
     .from('supply')
     .innerJoin('area', 'supply.id_area', 'area.id_area')

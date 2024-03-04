@@ -20,6 +20,7 @@ const getTransactionsBySupplyId = async (id) => await project.raw(`
       ELSE 'Tipe Lainnya'  
     END AS tipe_category,  
     t.tanggal,
+    t.resv_date, 
     u.nama_user AS id_user,  
     t.jumlah,
     a.nama_area AS id_area, 
@@ -32,7 +33,6 @@ const getTransactionsBySupplyId = async (id) => await project.raw(`
 `, [id]);
 
 
-
 const getTransaction = async () => {
   return await project.raw(`
     SELECT
@@ -40,6 +40,7 @@ const getTransaction = async () => {
       s.nama_supply,
       c.nama_category,
       t.tanggal,
+      t.resv_date,
       u.nama_user,
       t.jumlah,
       a.nama_area
